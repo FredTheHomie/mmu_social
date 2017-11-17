@@ -1,5 +1,5 @@
 import 'Routes.dart';
 
 void main() {
-  new Routes();
+  new Routes().Routes1();
 }

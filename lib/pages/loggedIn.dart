@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
 
 
 class LoggedIn extends StatefulWidget {
-  const LoggedIn({Key key}) : super(key : key);
 
   @override
   LoggedInState createState() => new LoggedInState();
@@ -12,48 +12,72 @@ class LoggedIn extends StatefulWidget {
 
 class LoggedInState extends State<LoggedIn> {
 
-  BuildContext context;
-  final GlobalKey<EditableTextState> textState = new GlobalKey<EditableTextState>();
-  Text text1 = new Text('asdasdsadasdaa');
+  /*_signOut() async {
+    FirebaseAuth auth = await FirebaseAuth.instance.signOut();
+    auth;
+    if(auth == null)
+      print('out');
+    else
+      print('in');
+  } */
+  PageController _pageController;
 
-  Future<String> _userText() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser user = await auth.currentUser();
-    return user.displayName.toString();
-  }
-
-
-  signOut() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    auth.signOut;
-  }
+  int _page = 1;
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
-      return new Container(
-        height: 100.0,
-        color: Colors.blue,
-        child: new Column(
+      return new Scaffold(
+        body: new PageView(
           children: <Widget>[
-            new Container(
-              child: new Text(
-               'asdsadasdasd'
-              ),
+            new Container(color: Colors.red),
+            new Container(color: Colors.blue),
+            new Container(color: Colors.grey)
+          ],
+          controller: _pageController,
+          onPageChanged: onPageChanged,
+        ),
+        bottomNavigationBar: new BottomNavigationBar(
+          items: [
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.chat),
+                title: new Text('Chat')
             ),
-            new Material(
-              child: new RaisedButton(
-                  onPressed: null
-              ),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.web),
+                title: new Text('Feed')
             ),
-            new Material(
-              child: new RaisedButton(
-                onPressed: signOut,
-              ),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.search),
+                title: new Text('Search')
             )
           ],
-        ),
+          onTap: navigationTapped,
+          currentIndex: _page,
+        )
       );
+  }
+  void navigationTapped(int page) {
+    _pageController.animateToPage(
+        page,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this._page = page;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = new PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }

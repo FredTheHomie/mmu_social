@@ -5,6 +5,7 @@ import 'pages/createAccount.dart';
 import 'pages/forgot.dart';
 import 'pages/createInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
 
 class Routes {
@@ -17,39 +18,47 @@ class Routes {
     "/CreateInfo": (BuildContext context) => new CreateInfo()
   };
 
-  ifRoute() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    if(auth.currentUser() == null)
-      return runApp(
-          new MaterialApp(
-            title: 'MMU Social App',
-            home: new MyApp(),
-            routes: routes,
-          )
-      );
-    else
-      return runApp(
-          new MaterialApp(
-            title: 'MMU Social App',
-            home: new LoggedIn(),
-            routes: routes,
-          )
-      );
+  final ref = FirebaseDatabase.instance;
+
+  Future<Map<String, dynamic>> getObject(String category, String id) async {
+    DataSnapshot snap = await ref.reference().child('users/$id').once();
+    return snap.value;
   }
 
-  bool _checkRoute() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    return !(auth.currentUser() == null);
-  }
 
-  Routes() {
+
+
+  plis() async {
+    Widget mm;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser user = await auth.currentUser();
+    getObject(user.toString(), user.uid).then((s) {
+      if(s == null)
+        mm = new CreateInfo();
+      else
+        mm = new LoggedIn();
+    });
+    /*if(getObject(user.toString(), user.uid) != null) {
+      print('asdadasdasdasd');
+      mm = new LoggedIn();
+    }
+    else {
+      print('dsdsdsdsdsdsdsdsds');
+      mm = new CreateInfo();
+    } */
+
+  }
+  Routes1() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser user = await auth.currentUser();
     runApp(
       new MaterialApp(
         title: 'MMU Social App',
-        home: _checkRoute == true ? new LoggedIn() : new MyApp(),
+        home: ((user == null) != true)
+            ? new LoggedIn()
+            : new MyApp(),
         routes: routes,
       )
     );
-    //ifRoute();
   }
 }

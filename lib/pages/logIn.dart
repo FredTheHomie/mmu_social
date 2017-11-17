@@ -36,14 +36,6 @@ class MyAppState extends State<MyApp> {
         .showSnackBar(new SnackBar(content: new Text(val)));
   }
 
-  checkIf(DataSnapshot snapshot) {
-    if(snapshot != null)
-      print('yes');
-    else
-      print('no');
-  }
-
-
   Future<Map<String, dynamic>> getObject(String category, String id) async {
     DataSnapshot snap = await ref.reference().child('users/$id').once();
     return snap.value;
