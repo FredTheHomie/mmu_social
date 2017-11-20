@@ -51,6 +51,7 @@ class Routes {
   Routes1() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser user = await auth.currentUser();
+    await plis();
     runApp(
       new MaterialApp(
         title: 'MMU Social App',
