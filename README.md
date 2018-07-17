@@ -1,8 +1,4 @@
-# mmu_social
+# Cross-Platform Social App
 
-A new Flutter project.
+This project was made so that I can practise some Dart and Flutter. The application utilises Firebase for the backend. It contains a login page, account-creation page, sessions, login with Google feature, and a simple timeline.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](http://flutter.io/).
